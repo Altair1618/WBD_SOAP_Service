@@ -1,28 +1,30 @@
 package main.middlewares;
 
 import com.sun.net.httpserver.HttpExchange;
+
+import java.sql.SQLException;
+
 import javax.xml.ws.handler.MessageContext;
 
 import main.models.Logging;
 import main.repositories.LoggingRepository;
+import main.utils.Response;
 
-public class LoggingMiddleware extends Middleware {
-    private static LoggingRepository repository = new LoggingRepository();
-    private String description;
-    private String IP;
-    private String endpoint;
+public class LoggingMiddleware {
+    private static final LoggingRepository repository = new LoggingRepository();
 
-    public LoggingMiddleware(MessageContext context, String description, String endpoint) {
-        HttpExchange exchange = (HttpExchange) context.get("com.sun.xml.internal.ws.http.exchange");
-        
-        this.IP = exchange.getRemoteAddress().getAddress().toString();
-        this.description = description;
-        this.endpoint = endpoint;
-    }
+    public Response addLogging(MessageContext context, String description, String endpoint) {
+        try {
+            HttpExchange exchange = (HttpExchange) context.get("com.sun.xml.internal.ws.http.exchange");
+            String IP = exchange.getRemoteAddress().getAddress().toString();
+            Logging logging = new Logging(description, IP, endpoint);
+            repository.addLogging(logging);
 
-    @Override
-    public void handle() {
-        Logging logging = new Logging(this.description, this.IP, this.endpoint);
-        repository.addLogging(logging);
+            return new Response(true, "Berhasil Menambahkan Data Logging", null);
+        } catch (SQLException e) {
+            return new Response(false, "Terjadi Kesalahan Pada Database", null);
+        } catch (Exception e) {
+            return new Response(false, "Gagal Menambahkan Data Logging", null);
+        }
     }
 }
