@@ -24,14 +24,13 @@ public class LoggingService {
     public Response getAllLoggings() {
         MessageContext messageContext = context.getMessageContext();
 
+        LoggingMiddleware loggingMiddleware = new LoggingMiddleware();
+        Response logResponse = loggingMiddleware.addLogging(messageContext, "Get All Loggings", "LoggingService");
+        if (logResponse.getStatus().equals("error")) return logResponse;
+
         AuthMiddleware authMiddleware = new AuthMiddleware();
         Response authResponse = authMiddleware.authenticate(messageContext);
         if (authResponse.getStatus().equals("error")) return authResponse;
-
-        LoggingMiddleware loggingMiddleware = new LoggingMiddleware();
-        Response logResponse = loggingMiddleware.addLogging(messageContext, "Get All Loggings", "LoggingService");
-
-        if (logResponse.getStatus().equals("error")) return logResponse;
 
         try {
             List<Logging> data = repository.getAllLoggings();
