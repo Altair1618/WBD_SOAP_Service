@@ -3,3 +3,6 @@
 
 # Compiled JAR
 target
+
+# DB Data
+data

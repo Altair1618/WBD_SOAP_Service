@@ -39,3 +39,6 @@ build/
 
 ### Libraries ###
 /lib
+
+### DB Data ###
+/data

@@ -1,31 +1,32 @@
 package main.models;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.Getter;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
-@Data
+@Getter
+@XmlRootElement(name = "logging")
 public class Logging {
-    private @NonNull Integer id;
-    private @NonNull String description;
-    private @NonNull String IP;
-    private @NonNull String endpoint;
-    private @NonNull Date requested_at;
+    @XmlElement
+    private Integer id;
+    @XmlElement
+    private String description;
+    @XmlElement
+    private String IP;
+    @XmlElement
+    private String endpoint;
+    @XmlElement
+    private Date requestedAt;
 
-    public Logging(String description, String IP, String endpoint) {
-        this.id = -1;
-        this.description = description;
-        this.IP = IP;
-        this.endpoint = endpoint;
-        this.requested_at = new Date();
-    }
+    public Logging() {}
 
-    public Logging(int id, String description, String IP, String endpoint, Date requested_at) {
+    public Logging(int id, String description, String IP, String endpoint, Date requestedAt) {
         this.id = id;
         this.description = description;
         this.IP = IP;
         this.endpoint = endpoint;
-        this.requested_at = requested_at;
+        this.requestedAt = requestedAt;
     }
 }

@@ -1,14 +1,11 @@
 package main.middlewares;
 
 import com.sun.net.httpserver.HttpExchange;
-
-import java.sql.SQLException;
-
-import javax.xml.ws.handler.MessageContext;
-
-import main.models.Logging;
 import main.repositories.LoggingRepository;
 import main.utils.Response;
+
+import javax.xml.ws.handler.MessageContext;
+import java.sql.SQLException;
 
 public class LoggingMiddleware {
     private static final LoggingRepository repository = new LoggingRepository();
@@ -17,8 +14,7 @@ public class LoggingMiddleware {
         try {
             HttpExchange exchange = (HttpExchange) context.get("com.sun.xml.internal.ws.http.exchange");
             String IP = exchange.getRemoteAddress().getAddress().toString();
-            Logging logging = new Logging(description, IP, endpoint);
-            repository.addLogging(logging);
+            repository.addLogging(description, IP, endpoint);
 
             return new Response(true, "Berhasil Menambahkan Data Logging", null);
         } catch (SQLException e) {

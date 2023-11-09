@@ -22,11 +22,12 @@ services:
     env_file:
       - .env
     volumes:
-      - wbd-soap-dbdata:/var/lib/mysql/
-      - /mysql/my.cnf:/etc/mysql/my.cnf
-      - /migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../WBD_SOAP_Service/data:/var/lib/mysql/
+      - ../WBD_SOAP_Service/mysql/my.cnf:/etc/mysql/my.cnf
+      - ../WBD_SOAP_Service/migrations/:/docker-entrypoint-initdb.d/
     healthcheck:
       test: mysql -h localhost -u root --password=${SOAP_ROOT_PASSWORD} -e 'SELECT 1'
       interval: 5s
       timeout: 5s
       retries: 10
+      start-period: 30s

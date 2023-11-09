@@ -1,17 +1,18 @@
 package main.services;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.jws.*;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
-
 import main.middlewares.AuthMiddleware;
 import main.middlewares.LoggingMiddleware;
 import main.models.Logging;
 import main.repositories.LoggingRepository;
+import main.utils.ListWrapper;
 import main.utils.Response;
+
+import javax.annotation.Resource;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+import java.util.List;
 
 @WebService
 public class LoggingService {
@@ -26,18 +27,26 @@ public class LoggingService {
 
         LoggingMiddleware loggingMiddleware = new LoggingMiddleware();
         Response logResponse = loggingMiddleware.addLogging(messageContext, "Get All Loggings", "LoggingService");
-        if (logResponse.getStatus().equals("error")) return logResponse;
+        if (logResponse.getStatus().equals("error")) {
+            System.out.println("Log Error: " + logResponse.getMessage());
+            return logResponse;
+        }
 
         AuthMiddleware authMiddleware = new AuthMiddleware();
         Response authResponse = authMiddleware.authenticate(messageContext);
-        if (authResponse.getStatus().equals("error")) return authResponse;
+        if (authResponse.getStatus().equals("error")) {
+            System.out.println("Auth Error: " + authResponse.getMessage());
+            return authResponse;
+        }
 
         try {
             List<Logging> data = repository.getAllLoggings();
             String message = "Berhasil Mendapatkan Data Loggings";
-            return new Response(true, message, data);
+            System.out.println(message);
+            return new Response(true, message, new ListWrapper<>(data));
         } catch (Exception e) {
             String message = "Gagal Mendapatkan Data Loggings";
+            System.out.println(message);
             return new Response(false, message, null);
         }
     }
