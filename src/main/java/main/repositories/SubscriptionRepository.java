@@ -14,6 +14,7 @@ import main.models.Subscription.Status;
 public class SubscriptionRepository extends Repository {
     private static final String tableName = "subscription";
     private static final Long subscriptionDuration = 1000L * 60 * 60 * 24 * 30;  // 30 days
+    // private static final Long subscriptionDuration = 1000L * 60;  // 60 seconds for testing
 
     private List<Subscription> readGetSubscriptionsResult(ResultSet res) throws SQLException {
         if (!res.isBeforeFirst()) return null;

@@ -4,10 +4,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Getter
+@Getter @Setter
 @XmlRootElement(name = "subscription")
 public class Subscription {
     public enum Status {

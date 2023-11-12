@@ -115,7 +115,8 @@ public class SubscriptionService {
                     return new Response(false, message, null);
                 }
 
-                String message = "User Subscription Expired";
+                data.get(0).setStatus(Subscription.Status.EXPIRED);
+                String message = "Subscription User Expired";
                 return new Response(true, message, data.get(0));
             }
         }
@@ -126,13 +127,13 @@ public class SubscriptionService {
                 message = "Permintaan Subscription User Sedang Diproses";
                 return new Response(true, message, data.get(0));
             case ACCEPTED:
-                message = "User Subscription Aktif";
+                message = "Subscription User Aktif";
                 return new Response(true, message, data.get(0));
             case REJECTED:
                 message = "Permintaan Subscription User Ditolak";
                 return new Response(true, message, data.get(0));
             case EXPIRED:
-                message = "User Subscription Expired";
+                message = "Subscription User Expired";
                 return new Response(true, message, data.get(0));
             default:
                 message = "User Belum Melakukan Permintaan Subscription";
@@ -151,6 +152,24 @@ public class SubscriptionService {
         AuthMiddleware authMiddleware = new AuthMiddleware();
         Response authResponse = authMiddleware.authenticate(messageContext);
         if (authResponse.getStatus().equals("error")) return authResponse;
+
+        List<Subscription> data;
+        try {
+            data = repository.getSubscriptionByUserId(id);
+        } catch (Exception e) {
+            String message = "Gagal Menerima Permintaan Subscription";
+            return new Response(false, message, null);
+        }
+
+        if (data == null || data.isEmpty()) {
+            String message = "User Belum Melakukan Permintaan Subscription";
+            return new Response(false, message, null);
+        }
+
+        if (data.get(0).getStatus() != Subscription.Status.PENDING) {
+            String message = "Status Subscription User Bukan PENDING";
+            return new Response(false, message, null);
+        }
 
         try {
             repository.updateSubscriptionStatus(id, Subscription.Status.ACCEPTED);
@@ -173,6 +192,24 @@ public class SubscriptionService {
         AuthMiddleware authMiddleware = new AuthMiddleware();
         Response authResponse = authMiddleware.authenticate(messageContext);
         if (authResponse.getStatus().equals("error")) return authResponse;
+
+        List<Subscription> data;
+        try {
+            data = repository.getSubscriptionByUserId(id);
+        } catch (Exception e) {
+            String message = "Gagal Menolak Permintaan Subscription";
+            return new Response(false, message, null);
+        }
+
+        if (data == null || data.isEmpty()) {
+            String message = "User Belum Melakukan Permintaan Subscription";
+            return new Response(false, message, null);
+        }
+
+        if (data.get(0).getStatus() != Subscription.Status.PENDING) {
+            String message = "Status Subscription User Bukan PENDING";
+            return new Response(false, message, null);
+        }
 
         try {
             repository.updateSubscriptionStatus(id, Subscription.Status.REJECTED);
