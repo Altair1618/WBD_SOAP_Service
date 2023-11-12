@@ -9,13 +9,13 @@ import java.util.List;
 @Getter
 public class ListWrapper<T> {
     @XmlElement
-    private final List<T> item;
+    private final List<T> list;
 
     public ListWrapper() {
-        this.item = new ArrayList<>();
+        this.list = new ArrayList<>();
     }
 
-    public ListWrapper(List<T> item) {
-        this.item = item;
+    public ListWrapper(List<T> list) {
+        this.list = list;
     }
 }

@@ -1,7 +1,6 @@
 package main.utils;
 
 import lombok.Getter;
-import lombok.Setter;
 import main.models.Logging;
 import main.models.Subscription;
 
