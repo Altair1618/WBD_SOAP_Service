@@ -115,7 +115,7 @@ public class SubscriptionService {
                     return new Response(false, message, null);
                 }
 
-                data.get(0).setStatus(Subscription.Status.EXPIRED);
+                data.get(0).updateStatus(Subscription.Status.EXPIRED);
                 String message = "Subscription User Expired";
                 return new Response(true, message, data.get(0));
             }
