@@ -10,7 +10,7 @@ public class Database {
     public static Connection getConnection() {
         if (conn == null) {
             try {
-                String url = "jdbc:mysql://host.docker.internal:3308/wbd_soap";
+                String url = "jdbc:mysql://wbd-soap-db:3306/wbd_soap";
                 String user = "root";
                 String password = System.getenv("MYSQL_ROOT_PASSWORD");
 
