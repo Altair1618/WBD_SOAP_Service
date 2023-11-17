@@ -78,7 +78,7 @@ public class SubscriptionRepository extends Repository {
 
     public void updateSubscriptionStatus(Integer id, Status newStatus) throws SQLException {
         String query = String.format(
-            "UPDATE %s SET status = ?, expired_at = ? WHERE id = ?",
+            "UPDATE %s SET status = ?, expired_at = ? WHERE user_id = ?",
             tableName
         );
 
